@@ -30,7 +30,7 @@ class SbisPage(BasePage):
 
     current_region = None
     current_partner_list = []
-    file_metadata = {'expected': .0, 'real': .0, 'file_path': ''}
+    file_metadata = {'expected_size': .0, 'file_path': ''}
 
     def click_contacts(self, sb):
         sb.click(self.CONTACTS_BAR)
@@ -47,7 +47,7 @@ class SbisPage(BasePage):
 
     def check_region(self, sb, region_name):
         self.get_region(sb)
-        logger.debug(str([region_name, self.current_region]))
+        logger.info(f'Looking for: "{region_name}" in "{self.current_region}"')
         assert region_name in self.current_region
 
     def check_local_region(self, sb):
@@ -99,21 +99,21 @@ class SbisPage(BasePage):
         _ = sb.find_element(self.PLUGIN_GET_LINK)  # built-in assert?
         url = _.get_attribute('href')
         filename = os.path.basename(url)
-        file_path = os.path.join(self.PROGRAM_DIR, filename)
+        file_path = os.path.join(sb.PROGRAM_DIR, filename)
         text_size = re.findall('\d+[\.|,]\d+', sb.find_element(self.PLUGIN_GET_LINK).text)
         assert len(text_size) > 0  # any match
         file_size_expected = lib.str2float(text_size[0])  # MB
         if os.path.isfile(file_path):
             os.remove(file_path)
-        self.download_file(sb, url, path=self.PROGRAM_DIR)
-
-        self.file_metadata.update({'expected': file_size_expected, 'file_path': file_path})
+        self.download_file(sb, url, path=sb.PROGRAM_DIR)
+        self.file_metadata.update({'expected_size': file_size_expected, 'file_path': file_path})
 
     def check_download_plugin(self):
         file_path = self.file_metadata['file_path']
-        file_size_expected = self.file_metadata['expected']
+        file_size_expected = self.file_metadata['expected_size']
         precision = len(str(file_size_expected).split('.')[1])
-        last_valued_digit = float('0.' + '0' * (precision - 1) + '1')
+        # last_valued_digit = float('0.' + '0' * (precision - 1) + '1')
+        last_valued_digit = 1 / 10**precision
         logger.debug(f'precision: {precision}, last_valued_digit: {last_valued_digit}')
         # file exists
         assert os.path.isfile(file_path)

@@ -9,15 +9,18 @@ BaseCase.main(__name__, __file__)
 
 logger = logging.getLogger(__name__)
 
-PROGRAM_DIR = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
+# PROGRAM_DIR = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
 
 class TestSbisToTensor(BaseSetup):
+    PROGRAM_DIR = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
+    logger.info(PROGRAM_DIR)
+
     def test_case1(self):
         logger.info('1st case start')
 
-        sbis_page = SbisPage(PROGRAM_DIR)
-        tensor_page = TensorPage(PROGRAM_DIR)
+        sbis_page = SbisPage()
+        tensor_page = TensorPage()
 
         # Переходим на страницу sbis.ru и в раздел "Контакты"
         sbis_page.go_to(self, "https://sbis.ru/")
@@ -43,7 +46,7 @@ class TestSbisToTensor(BaseSetup):
     def test_case2(self):
         logger.info('2nd case start')
 
-        sbis_page = SbisPage(PROGRAM_DIR)
+        sbis_page = SbisPage()
         # Переходим на страницу sbis.ru и в раздел "Контакты"
         sbis_page.go_to(self, "https://sbis.ru/")
         sbis_page.click_contacts(self)
@@ -67,7 +70,7 @@ class TestSbisToTensor(BaseSetup):
     def test_case3(self):
         logger.info('3rd case start')
 
-        sbis_page = SbisPage(PROGRAM_DIR)
+        sbis_page = SbisPage()
 
         # Перейти на https://sbis.ru/
         sbis_page.go_to(self, "https://sbis.ru/")
