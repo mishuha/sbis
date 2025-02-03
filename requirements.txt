@@ -1,0 +1,4 @@
+geocoder==1.38.1
+selenium==4.28.1
+seleniumbase==4.34.4
+transliterate==1.10.2
